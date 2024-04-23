@@ -1,0 +1,85 @@
+{% extends "layout.html" %} {% block body %}
+
+<div class="row">
+  <div class="col-lg-8">
+    <!-- Post content-->
+    <article>
+      <!-- Post header-->
+      <header class="mb-4">
+        <!-- Post title-->
+        <h1 class="fw-bolder mb-1">{{article.title}}</h1>
+        <!-- Post meta content-->
+        <div class="text-muted fst-italic mb-2">
+          <b>{{article.created_date}}</b> tarihinde
+          <b>{{article.author.username}}</b> tarafından yayınlanmıştır
+        </div>
+      </header>
+      <!-- Preview image figure-->
+      {% if article.article_image %}
+      <figure class="mb-4">
+        <img
+          class="img-fluid rounded"
+          src="{{article.article_image.url}}"
+          alt="..."
+        />
+      </figure>
+      {% endif %}
+
+      <!-- Post content-->
+      <section class="mb-5">{{article.content|safe}}</section>
+    </article>
+
+    <!-- Comments section-->
+    <section class="mb-5">
+      <div class="card bg-light">
+        <div class="card-body">
+          {% if comments %} {% for comment in comments %}
+          <div class="d-flex">
+            <div class="flex-shrink-0">
+              <img
+                class="rounded-circle"
+                src="https://dummyimage.com/50x50/ced4da/6c757d.jpg"
+                alt="..."
+              />
+            </div>
+            <div class="ms-3">
+              <div class="fw-bold">{{comment.comment_author}}</div>
+              <div class="text-muted fst-italic mb-2">
+                <b>{{comment.comment_date}}</b>
+              </div>
+              {{comment.comment_content}}
+            </div>
+          </div>
+          <hr>
+          {% endfor %} {% else %}
+          <div class="alert alert-primary">Henüz Yorum Bulunmuyor</div>
+          {% endif %}
+
+          <!-- Comment form-->
+          <form
+            class="mb-4"
+            method="post"
+            action="{% url 'article:comment' article.id%}"
+          >
+            {% csrf_token %}
+            <textarea style="margin-top: 10px"
+              name="comment_content"
+              class="form-control"
+              rows="3"
+              placeholder="Yorum Yaz..."
+            ></textarea>
+            <button
+              style="margin-top: 10px"
+              type="submit"
+              class="btn btn-primary"
+            >
+              Gönder
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+{% endblock body %}

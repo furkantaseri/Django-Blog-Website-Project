@@ -1,0 +1,80 @@
+{% extends "layout.html" %} 
+
+{% block body %}
+
+<div class="jumbotron text-center">
+  <h3>Yazılım Bloğuna Hoş Geldiniz</h3>
+  <p>
+    Bu blogta geliştiriciler olarak blog yazılarınızı paylaşabilirsiniz ve insanlara yardımcı olabilirsiniz.
+  </p>
+
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-10 offset-mr-3">
+    <div class="row">
+      <div class="col-lg-5" id="most_commented">
+          <h3>En Çok Yorum Alanlar</h3>
+          <hr>
+          
+          <ul class="list-group">
+            {% if articles %} {% for article_infos in articles %}
+          
+            <a href="{% url 'article:detail' article_infos.id %}" >
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{article_infos.title}}
+                <span class="badge bg-primary rounded-pill">
+                  {% for article_queryset in most_commented_articles %}
+
+                  {% if article_infos.id == article_queryset.article_id %}
+
+                  {{article_queryset.comment_count}}
+
+                  {{break}}
+                  {% else %}
+                  {% endif %}
+                  
+                  {% endfor %}
+                </span>
+              </li>
+            </a>
+          
+          
+            <hr>
+            {% endfor %} {% else %}
+            <div class="alert alert-primary">Henüz Yorum Bulunmuyor</div>
+            {% endif %}
+          
+          
+
+          </ul>
+      </div>
+      <div class="col-lg-5" id="latest_article">
+        <h3>En Son Eklenenler</h3>
+        <hr>
+        
+        <ul class="list-group">
+          {% if latest_articles %} {% for latest_article in latest_articles %}
+        
+          <a href="{% url 'article:detail' latest_article.id %}" >
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              {{latest_article.title}}
+
+            </li>
+          </a>
+        
+        
+          <hr>
+          {% endfor %} {% else %}
+          <div class="alert alert-primary">Henüz Yorum Bulunmuyor</div>
+          {% endif %}
+        
+        
+
+        </ul>
+    </div>
+  </div>
+  </div>
+</div>
+
+{% endblock body %}
